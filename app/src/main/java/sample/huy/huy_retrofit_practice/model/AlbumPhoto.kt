@@ -13,7 +13,6 @@ class AlbumPhoto {
         id = _id
         title = _title
     }
-
     companion object {
         val TAG = "AlbumPhoto"
     }
