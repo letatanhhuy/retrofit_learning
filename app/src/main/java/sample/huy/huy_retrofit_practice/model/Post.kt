@@ -1,12 +1,12 @@
 package sample.huy.huy_retrofit_practice.activity.model
 
-class AlbumPhoto {
+import com.google.gson.annotations.SerializedName
+
+class Post {
+    @SerializedName("id")
     var id:Int = -1
-        get() = id
-        set(value) {
-            if(value > 0)
-                field = value
-        }
+
+    @SerializedName("title")
     var title:String = ""
 
     constructor(_id: Int, _title:String) {
@@ -14,6 +14,6 @@ class AlbumPhoto {
         title = _title
     }
     companion object {
-        val TAG = "AlbumPhoto"
+        val TAG = "Post"
     }
 }
