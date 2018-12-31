@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Huy_Retrofit_Practice</string>
+    <string name="app_name">Huy App</string>
     <string name="postListTitle">Post List</string>
+    <string name="new_post">New post</string>
 </resources>

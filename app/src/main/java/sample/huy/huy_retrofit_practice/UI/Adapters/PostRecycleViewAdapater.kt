@@ -1,4 +1,4 @@
-package sample.huy.huy_retrofit_practice.UI
+package sample.huy.huy_retrofit_practice.UI.Adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ class PostRecycleViewAdapter(private val dataSet: ArrayList<Post>) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-       holder.postRowView.txtPostName.text = dataSet.get(position).title + "-1234567891011121314"
+       holder.postRowView.txtPostName.text = dataSet.get(position).title
     }
 
     override fun getItemCount(): Int {

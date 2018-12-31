@@ -9,6 +9,11 @@ class Post {
     @SerializedName("title")
     var title:String = ""
 
+
+    constructor(_title:String) {
+        title = _title
+    }
+
     constructor(_id: Int, _title:String) {
         id = _id
         title = _title
