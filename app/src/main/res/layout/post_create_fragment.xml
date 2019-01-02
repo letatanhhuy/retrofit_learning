@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@+id/txePostName"/>
     <EditText
         android:id="@+id/txePostName"
-        android:text="LE TAT ANH HUY"
+        android:text=""
         android:maxLines="1"
         android:ellipsize="end"
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txePostId"/>
     <Button
             android:id="@+id/btnCreate"
-            android:text="Save Posr"
+            android:text="@string/save_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/txePostName"/>
