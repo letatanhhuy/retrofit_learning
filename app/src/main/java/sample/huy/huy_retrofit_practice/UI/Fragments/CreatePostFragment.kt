@@ -51,7 +51,8 @@ class CreatePostFragment:Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menuCreateNew).isVisible = false
+        menu.clear()
+        //menu.findItem(R.id.menuCreateNew).isVisible = false
     }
 
     companion object {
