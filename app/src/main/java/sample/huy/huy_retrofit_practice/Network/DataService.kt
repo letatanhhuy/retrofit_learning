@@ -13,4 +13,7 @@ interface DataService {
 
     @POST("/posts")
     fun createPost(@Body post:Post):Call<Post>
+
+    @DELETE("/posts/{id}")
+    fun deletePost(@Path("id") id:Int):Call<Void>
 }

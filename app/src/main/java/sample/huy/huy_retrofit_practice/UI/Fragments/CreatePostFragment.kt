@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import sample.huy.huy_retrofit_practice.Network.PostNetworkService
@@ -36,23 +37,19 @@ class CreatePostFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var rootView = layoutInflater.inflate(R.layout.post_create_fragment, container, false).apply { tag = TAG }
-        var textPostName:TextView = rootView.findViewById(R.id.txePostName)
-        var textPostId:TextView = rootView.findViewById(R.id.txePostId)
         var buttonCreate:Button = rootView.findViewById(R.id.btnCreate)
         buttonCreate.setOnClickListener {
+            var textPostName:TextView = rootView.findViewById(R.id.txePostName)
+            var textPostId:TextView = rootView.findViewById(R.id.txePostId)
             PostNetworkService.createNewPost(Post(Integer.valueOf(textPostId.text.toString()), textPostName.text.toString()), mHandler)
         }
+        setHasOptionsMenu(true)
         return rootView
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.clear()
-        //menu.findItem(R.id.menuCreateNew).isVisible = false
+        menu.findItem(R.id.menuCreateNew).isVisible = false
+        menu.findItem(R.id.menuCreateOk).isVisible = true
     }
 
     companion object {

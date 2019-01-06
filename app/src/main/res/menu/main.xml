@@ -3,6 +3,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       tools:ignore="AppCompatResource">
     <item android:id="@+id/menuCreateNew"
-          app:showAsAction="always"
+          app:showAsAction="ifRoom"
+          android:visible="true"
           android:title="@string/new_post" />
+    <item android:id="@+id/menuCreateOk"
+          app:showAsAction="ifRoom"
+          android:visible="false"
+          android:title="@string/create_post" />
 </menu>

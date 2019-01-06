@@ -18,7 +18,9 @@ class PostNetworkService {
         LIST_UPDATE_SUCCESS(0),
         LIST_UPDATE_FAILED(1),
         POST_CREATE_SUCCESS(2),
-        POST_CREATE_FAIL(4)
+        POST_CREATE_FAIL(3),
+        POST_DELETE_SUCCESS(4),
+        POST_DELETE_FAIL(5)
     }
     companion object {
         fun getAllPost(list:ArrayList<Post>, handler: Handler) {
@@ -51,18 +53,17 @@ class PostNetworkService {
 
                 }
             )
-            Log.d("Pikachu", " enqueue end")
         }
 
-        fun createNewPost(post:Post, handler: Handler): Post? {
-            var retVal:Post? = null
+        fun createNewPost(post:Post, handler: Handler) {
+
             var dataService = RetrofitService.getInstanceLocal().create(DataService::class.java)
             var callCreate = dataService.createPost(post)
             callCreate.enqueue (
                 object : Callback<Post> {
                     override fun onResponse(call: Call<Post>, response: Response<Post>) {
                         Log.d("Pikachu", " create onResponse:" + response.body().toString())
-                        retVal = response.body()
+                        var retVal = response.body()
                         val msg = handler.obtainMessage()
                         if(retVal != null) {
                             msg.what = RESULT.POST_CREATE_SUCCESS.INDEX
@@ -80,7 +81,29 @@ class PostNetworkService {
                     }
                 }
             )
-            return retVal
+        }
+
+        fun deletePost(post: Post, handler: Handler) {
+            var dataService = RetrofitService.getInstanceLocal().create(DataService::class.java)
+            var callDelete = dataService.deletePost(post.id)
+            callDelete.enqueue(
+                object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Log.d("Pikachu", " delete onResponse:")
+                        val msg = handler.obtainMessage()
+                        msg.what = RESULT.POST_DELETE_SUCCESS.INDEX
+                        msg.obj = post
+                        handler.sendMessage(msg)
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.d("Pikachu", " delete onFailure:" + t.message)
+                        val msg = handler.obtainMessage()
+                        msg.what = RESULT.POST_DELETE_FAIL.INDEX
+                        handler.sendMessage(msg)
+                    }
+                }
+            )
         }
     }
 }

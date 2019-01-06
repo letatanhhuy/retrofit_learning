@@ -2,5 +2,9 @@
     <string name="app_name">Huy App</string>
     <string name="postListTitle">Post List</string>
     <string name="new_post">New post</string>
+    <string name="create_post">Create post</string>
     <string name="save_post">Save post</string>
+    <string name="edit_post">Edit</string>
+    <string name="test_long_name">this string can be very very long</string>
+    <string name="test_string">test string</string>
 </resources>

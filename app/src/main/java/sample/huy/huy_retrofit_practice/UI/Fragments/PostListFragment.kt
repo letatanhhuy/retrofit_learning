@@ -20,6 +20,7 @@ class PostListFragment:Fragment() {
     private lateinit var postRecyclerViewAdapter: PostRecycleViewAdapter
     private lateinit var postRecyclerViewManager: RecyclerView.LayoutManager
     private lateinit var postDataSet: ArrayList<Post>
+
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message?) {
             Log.d("Pikachu", " handleMessage:" + msg?.what)
@@ -37,10 +38,6 @@ class PostListFragment:Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -56,7 +53,13 @@ class PostListFragment:Fragment() {
             adapter = postRecyclerViewAdapter
         }
         PostNetworkService.getAllPost(postDataSet, mHandler)
+        setHasOptionsMenu(true)
         return rootView
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menuCreateNew).isVisible = true
+        menu.findItem(R.id.menuCreateOk).isVisible = false
     }
 
     companion object {
