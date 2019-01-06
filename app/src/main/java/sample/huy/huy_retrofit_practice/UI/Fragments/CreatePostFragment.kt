@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.post_create_fragment.*
 import sample.huy.huy_retrofit_practice.Network.PostNetworkService
 import sample.huy.huy_retrofit_practice.R
 import sample.huy.huy_retrofit_practice.activity.model.Post
@@ -45,6 +46,18 @@ class CreatePostFragment:Fragment() {
         }
         setHasOptionsMenu(true)
         return rootView
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menuCreateOk -> {
+                btnCreate.performClick()
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+        return false
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

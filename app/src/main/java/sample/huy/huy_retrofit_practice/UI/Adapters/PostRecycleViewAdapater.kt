@@ -1,37 +1,22 @@
 package sample.huy.huy_retrofit_practice.UI.Adapters
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.post_row_view.view.*
-import sample.huy.huy_retrofit_practice.Network.PostNetworkService
 import sample.huy.huy_retrofit_practice.R
 import sample.huy.huy_retrofit_practice.activity.model.Post
 
-class PostRecycleViewAdapter(private val dataSet: ArrayList<Post>) : RecyclerView.Adapter<PostRecycleViewAdapter.PostViewHolder>() {
-    class PostViewHolder(val postRowView: ViewGroup) : RecyclerView.ViewHolder(postRowView)
-    private lateinit var context:Context
-    private var mHandler:Handler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message?) {
-            Log.d("Pikachu", " handleMessage:" + msg?.what)
-            when(msg?.what) {
-                PostNetworkService.RESULT.POST_DELETE_SUCCESS.INDEX -> {
-                    dataSet.remove(msg.obj)
-                    notifyDataSetChanged()
-                }
-                PostNetworkService.RESULT.POST_DELETE_FAIL.INDEX -> {
 
-                }
-            }
-            super.handleMessage(msg)
-        }
-    }
+
+class PostRecycleViewAdapter(private val dataSet: ArrayList<Post>, private val postItemListener: PostItemListener) : RecyclerView.Adapter<PostRecycleViewAdapter.PostViewHolder>() {
+
+    class PostViewHolder(val postRowView: ViewGroup) : RecyclerView.ViewHolder(postRowView)
+
+    private lateinit var context:Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         context = parent.context
         val postRowView = LayoutInflater.from(parent.context).inflate(R.layout.post_row_view, parent, false) as ViewGroup
@@ -44,11 +29,24 @@ class PostRecycleViewAdapter(private val dataSet: ArrayList<Post>) : RecyclerVie
             Toast.makeText(context, "test" + dataSet[position].id, Toast.LENGTH_LONG).show()
         }
         holder.postRowView.btnDelete.setOnClickListener {
-            PostNetworkService.deletePost(dataSet[position], mHandler)
+            postItemListener.onDeletePost(dataSet[position])
+        }
+        holder.postRowView.checkboxPost.setOnCheckedChangeListener { buttonView, checked ->
+            if (checked) {
+                postItemListener.onCheck(dataSet[position])
+            } else {
+                postItemListener.onUncheck(dataSet[position])
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return dataSet.size
+    }
+
+    interface PostItemListener {
+        fun onCheck(post: Post)
+        fun onUncheck(post: Post)
+        fun onDeletePost(post: Post)
     }
 }

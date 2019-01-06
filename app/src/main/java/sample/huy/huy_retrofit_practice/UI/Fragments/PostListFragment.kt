@@ -20,6 +20,7 @@ class PostListFragment:Fragment() {
     private lateinit var postRecyclerViewAdapter: PostRecycleViewAdapter
     private lateinit var postRecyclerViewManager: RecyclerView.LayoutManager
     private lateinit var postDataSet: ArrayList<Post>
+    private lateinit var checkedPost: ArrayList<Post>
 
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message?) {
@@ -33,6 +34,13 @@ class PostListFragment:Fragment() {
                 PostNetworkService.RESULT.LIST_UPDATE_FAILED.INDEX -> {
                    Toast.makeText(activity, "Update failed", Toast.LENGTH_LONG).show()
                 }
+                PostNetworkService.RESULT.POST_DELETE_SUCCESS.INDEX -> {
+                    postDataSet.remove(msg.obj)
+                    postRecyclerViewAdapter.notifyDataSetChanged()
+                }
+                PostNetworkService.RESULT.POST_DELETE_FAIL.INDEX -> {
+
+                }
             }
             super.handleMessage(msg)
         }
@@ -45,7 +53,22 @@ class PostListFragment:Fragment() {
             container, false).apply { tag = TAG}
         postRecyclerViewManager = LinearLayoutManager(activity)
         postDataSet = ArrayList()
-        postRecyclerViewAdapter = PostRecycleViewAdapter(postDataSet)
+        checkedPost = ArrayList()
+        val postItemListener = object : PostRecycleViewAdapter.PostItemListener {
+            override fun onCheck(post: Post) {
+                checkedPost.add(post)
+                activity?.invalidateOptionsMenu()
+            }
+            override fun onUncheck(post: Post) {
+                checkedPost.remove(post)
+                activity?.invalidateOptionsMenu()
+            }
+            override fun onDeletePost(post: Post) {
+                PostNetworkService.deletePost(post,mHandler)
+            }
+        }
+
+        postRecyclerViewAdapter = PostRecycleViewAdapter(postDataSet, postItemListener)
         postRecylerView = rootView.findViewById(R.id.recycleViewPost)
         postRecylerView.apply {
             setHasFixedSize(true)
@@ -60,6 +83,23 @@ class PostListFragment:Fragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.menuCreateNew).isVisible = true
         menu.findItem(R.id.menuCreateOk).isVisible = false
+        menu.findItem(R.id.menuDelete).isVisible = (checkedPost.size > 0)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menuDelete -> {
+                for(post in checkedPost) {
+                    PostNetworkService.deletePost(post, mHandler)
+                    checkedPost.remove(post)
+                }
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+        return false
     }
 
     companion object {
